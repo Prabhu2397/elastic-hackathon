@@ -6,10 +6,13 @@ import json
 import boto3
 from elasticsearch import Elasticsearch
 from datetime import datetime
+from dotenv import load_dotenv
 import uuid
 
 app = Flask(__name__)
 CORS(app, resources={r"/upload_pdf": {"origins": "*"}})
+
+load_dotenv()
 
 # Function to extract text from PDF
 def extract_pdf_text(pdf_path):
@@ -36,8 +39,8 @@ def get_current_timestamp():
     return datetime.now().isoformat() + "Z" # Adds the 'Z' to indicate UTC timezone
 
 # Initialize Bedrock and Elasticsearch clients
-bedrock_runtime = boto3.client('bedrock-runtime', region_name='ap-south-1', aws_access_key_id="$ACCESS_KEY",
-        aws_secret_access_key="$SECRET_KEY")
+bedrock_runtime = boto3.client('bedrock-runtime', region_name='ap-south-1', aws_access_key_id="AWS_ACCESS_KEY_ID",
+        aws_secret_access_key="AWS_SECRET_ACCESS_KEY")
 es = Elasticsearch(
     ['https://ss-pet-store.es.us-central1.gcp.cloud.es.io:9243'],
     basic_auth=('logstash_user', '123456')
